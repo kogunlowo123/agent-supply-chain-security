@@ -1,0 +1,10 @@
+version: '3.9'
+
+# Copy this to docker-compose.override.yml for local development overrides
+services:
+  api:
+    environment:
+      - VERTEX_AI_PROJECT=your-dev-project
+      - NVD_API_KEY=your-nvd-api-key
+    volumes:
+      - ~/.config/gcloud:/root/.config/gcloud:ro

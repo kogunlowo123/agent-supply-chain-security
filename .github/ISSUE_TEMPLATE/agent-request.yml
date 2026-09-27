@@ -1,0 +1,29 @@
+name: Agent Request
+description: Request a new AI agent capability
+title: "[AGENT] "
+labels: ["enhancement", "agent"]
+body:
+  - type: textarea
+    id: use_case
+    attributes:
+      label: Use Case
+      description: What supply chain security problem does this agent solve?
+    validations:
+      required: true
+  - type: dropdown
+    id: agent_family
+    attributes:
+      label: Agent Family
+      options:
+        - sbom-analyzer
+        - provenance-verifier
+        - dependency-auditor
+        - new-family
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance Criteria
+    validations:
+      required: true

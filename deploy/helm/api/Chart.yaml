@@ -1,0 +1,14 @@
+apiVersion: v2
+name: supply-chain-api
+description: Agent Supply Chain Security API Helm Chart
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+keywords:
+  - supply-chain
+  - sbom
+  - security
+  - slsa
+home: https://github.com/kogunlowo123/agent-supply-chain-security
+sources:
+  - https://github.com/kogunlowo123/agent-supply-chain-security

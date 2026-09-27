@@ -1,0 +1,30 @@
+name: Security Finding
+description: Report a security finding (non-critical; use email for critical)
+title: "[SECURITY] "
+labels: ["security"]
+body:
+  - type: markdown
+    attributes:
+      value: "**For critical vulnerabilities, email security@example.com instead.**"
+  - type: textarea
+    id: finding
+    attributes:
+      label: Finding Description
+    validations:
+      required: true
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      options:
+        - Low
+        - Medium
+        - High
+    validations:
+      required: true
+  - type: textarea
+    id: impact
+    attributes:
+      label: Impact
+    validations:
+      required: true

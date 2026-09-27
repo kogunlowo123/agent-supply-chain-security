@@ -1,0 +1,45 @@
+id: sbom-analyzer
+name: SBOM Analyzer
+description: Analyzes CycloneDX SBOMs for policy violations and generates compliance reports
+tier: T0
+family: sbom
+version: "1.0.0"
+
+capabilities:
+  - sbom_analysis
+  - policy_enforcement
+  - rag_retrieval
+  - report_generation
+
+tools:
+  - name: rag_search
+    scope: read
+    description: Search SLSA/CycloneDX documentation corpus
+  - name: sbom_query
+    scope: read
+    description: Query stored SBOM records
+
+graph:
+  entry: retrieve_context
+  nodes:
+    - retrieve_context
+    - analyze_sbom
+    - generate_report
+  edges:
+    - from: retrieve_context
+      to: analyze_sbom
+    - from: analyze_sbom
+      to: generate_report
+    - from: generate_report
+      to: END
+
+guardrails:
+  input_screening: true
+  grounding_check: true
+  citation_required: true
+  max_tokens_per_run: 8192
+
+budget:
+  max_llm_calls: 5
+  max_tool_calls: 10
+  timeout_seconds: 120

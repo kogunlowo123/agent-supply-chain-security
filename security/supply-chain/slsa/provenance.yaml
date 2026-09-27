@@ -1,0 +1,28 @@
+# SLSA provenance verification configuration
+# Target: SLSA Level 3
+slsa:
+  target_level: 3
+  requirements:
+    - id: build_as_code
+      description: All build steps defined in version-controlled code
+      status: implemented
+    - id: hermetic_build
+      description: Build process is hermetic (no network access during build)
+      status: planned
+    - id: signed_provenance
+      description: Provenance is signed with a non-falsifiable key
+      status: implemented
+      implementation: cosign/sigstore
+    - id: isolated_build
+      description: Build runs on ephemeral, isolated infrastructure
+      status: implemented
+      implementation: github-actions
+    - id: two_party_review
+      description: All code changes reviewed before build
+      status: implemented
+      implementation: github-branch-protection
+
+verification:
+  rekor_url: https://rekor.sigstore.dev
+  fulcio_url: https://fulcio.sigstore.dev
+  expected_builder: https://github.com/slsa-framework/slsa-github-generator

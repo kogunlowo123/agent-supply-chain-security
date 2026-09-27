@@ -1,0 +1,55 @@
+name: Docker Build and Push
+description: Build and push Docker image to GCR with cosign attestation
+
+inputs:
+  image-name:
+    description: Docker image name
+    required: true
+  dockerfile:
+    description: Path to Dockerfile
+    required: true
+  context:
+    description: Build context
+    required: true
+  gcp-project:
+    description: GCP project ID
+    required: true
+  gcp-region:
+    description: GCP region
+    default: us-central1
+  sign-image:
+    description: Sign image with cosign
+    default: 'true'
+
+outputs:
+  image-digest:
+    description: Image digest
+    value: ${{ steps.build.outputs.digest }}
+
+runs:
+  using: composite
+  steps:
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Configure Docker for GCR
+      shell: bash
+      run: gcloud auth configure-docker ${{ inputs.gcp-region }}-docker.pkg.dev --quiet
+
+    - name: Build and push
+      id: build
+      uses: docker/build-push-action@v5
+      with:
+        context: ${{ inputs.context }}
+        file: ${{ inputs.dockerfile }}
+        push: true
+        tags: ${{ inputs.gcp-region }}-docker.pkg.dev/${{ inputs.gcp-project }}/supply-chain/${{ inputs.image-name }}:${{ github.sha }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+
+    - name: Sign image with cosign
+      if: inputs.sign-image == 'true'
+      shell: bash
+      run: |
+        cosign sign --yes \
+          ${{ inputs.gcp-region }}-docker.pkg.dev/${{ inputs.gcp-project }}/supply-chain/${{ inputs.image-name }}@${{ steps.build.outputs.digest }}
