@@ -1,0 +1,15 @@
+apiVersion: policy.sigstore.dev/v1alpha1
+kind: ClusterImagePolicy
+metadata:
+  name: supply-chain-image-policy
+spec:
+  images:
+    - glob: "us-central1-docker.pkg.dev/**"
+  authorities:
+    - keyless:
+        url: https://fulcio.sigstore.dev
+        identities:
+          - issuer: https://accounts.google.com
+            subject: "serviceAccount:github-actions@*.iam.gserviceaccount.com"
+      ctlog:
+        url: https://rekor.sigstore.dev

@@ -1,0 +1,50 @@
+replicaCount: 2
+
+image:
+  repository: us-central1-docker.pkg.dev/PROJECT_ID/supply-chain/api
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8000
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 512Mi
+  limits:
+    cpu: 1000m
+    memory: 1Gi
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 70
+
+serviceAccount:
+  create: true
+  annotations:
+    iam.gke.io/gcp-service-account: "supply-chain-api-prod@PROJECT_ID.iam.gserviceaccount.com"
+
+securityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  readOnlyRootFilesystem: true
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+
+env:
+  APP_ENV: production
+  LOG_LEVEL: INFO
+
+envFromSecret:
+  DATABASE_URL:
+    secretName: supply-chain-db-credentials
+    key: url
+  JWT_SECRET_KEY:
+    secretName: supply-chain-jwt-secret
+    key: key

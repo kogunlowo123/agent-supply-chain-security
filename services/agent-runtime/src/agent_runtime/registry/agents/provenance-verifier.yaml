@@ -1,0 +1,30 @@
+id: provenance-verifier
+name: Provenance Verifier
+description: Verifies SLSA provenance attestations and reports failures
+tier: T0
+family: provenance
+version: "1.0.0"
+
+capabilities:
+  - provenance_verification
+  - slsa_level_assessment
+  - violation_reporting
+
+tools:
+  - name: rag_search
+    scope: read
+    description: Search SLSA framework documentation
+  - name: vuln_lookup
+    scope: read
+    description: Look up provenance records
+
+guardrails:
+  input_screening: true
+  grounding_check: true
+  citation_required: true
+  max_tokens_per_run: 4096
+
+budget:
+  max_llm_calls: 3
+  max_tool_calls: 5
+  timeout_seconds: 60

@@ -1,0 +1,30 @@
+id: dependency-auditor
+name: Dependency Auditor
+description: Scans dependency trees for vulnerabilities and recommends remediations
+tier: T1
+family: dependency
+version: "1.0.0"
+
+capabilities:
+  - vulnerability_scanning
+  - remediation_recommendation
+  - policy_assessment
+
+tools:
+  - name: vuln_lookup
+    scope: read
+    description: Query OSV/NVD vulnerability databases
+  - name: rag_search
+    scope: read
+    description: Search NIST SSDF and CVE documentation
+
+guardrails:
+  input_screening: true
+  grounding_check: true
+  citation_required: true
+  max_tokens_per_run: 8192
+
+budget:
+  max_llm_calls: 5
+  max_tool_calls: 20
+  timeout_seconds: 180

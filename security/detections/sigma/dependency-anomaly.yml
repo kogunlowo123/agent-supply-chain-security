@@ -1,0 +1,33 @@
+title: Dependency Supply Chain Anomaly
+id: d9f8c3e4-1a2b-4c5d-8e6f-7a8b9c0d1e2f
+status: experimental
+description: Detects anomalous dependency scan results indicating potential supply chain compromise
+references:
+  - https://slsa.dev/
+  - https://ossf.github.io/osv-schema/
+author: Agent Supply Chain Security Team
+date: 2024/01/15
+tags:
+  - attack.t1195.001
+  - supply-chain
+  - dependency-confusion
+logsource:
+  product: supply-chain-api
+  service: dependency-scanner
+detection:
+  selection:
+    event_type: "vulnerability_scan"
+    policy_decision: "DENY"
+  critical_cvss:
+    cvss_score|gte: 9.0
+  condition: selection AND critical_cvss
+fields:
+  - scan_id
+  - package_name
+  - package_version
+  - vuln_id
+  - cvss_score
+  - tenant_id
+falsepositives:
+  - Known vulnerable packages used in development environments
+level: high

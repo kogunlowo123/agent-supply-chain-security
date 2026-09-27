@@ -1,0 +1,41 @@
+name: Terraform
+
+on:
+  push:
+    branches: [main]
+    paths: ['infra/**']
+  pull_request:
+    paths: ['infra/**']
+
+permissions:
+  contents: read
+  id-token: write
+  pull-requests: write
+
+jobs:
+  terraform-plan:
+    name: Terraform Plan
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        environment: [dev, staging]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          gcp-workload-identity-provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          gcp-service-account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+
+      - name: Terraform Init
+        working-directory: infra/envs/gcp/${{ matrix.environment }}
+        run: terraform init
+
+      - name: Terraform Validate
+        working-directory: infra/envs/gcp/${{ matrix.environment }}
+        run: terraform validate
+
+      - name: Terraform Plan
+        working-directory: infra/envs/gcp/${{ matrix.environment }}
+        run: terraform plan -out=tfplan

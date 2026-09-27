@@ -1,0 +1,7 @@
+# Default owners for everything in the repo
+* @kogunlowo123
+
+# Security-critical files
+/security/ @kogunlowo123
+/identity/ @kogunlowo123
+/infra/ @kogunlowo123

@@ -1,0 +1,23 @@
+# Syft SBOM generation configuration
+output:
+  - "cyclonedx-json"
+
+package:
+  search-unindexed-locations: true
+  search-indexed-locations: true
+
+file:
+  metadata:
+    digests:
+      - "sha256"
+      - "sha1"
+
+exclude:
+  - "**/*.pyc"
+  - "**/__pycache__/**"
+  - ".git/**"
+  - ".tox/**"
+
+log:
+  quiet: false
+  verbosity: 0
