@@ -52,7 +52,7 @@ def generate_cyclonedx_sbom(artifact: AttestRequest) -> dict[str, Any]:
     root_component = Component(
         name=artifact.artifact_name,
         version=artifact.artifact_version,
-        component_type=ComponentType.CONTAINER,
+        type=ComponentType.CONTAINER,
         bom_ref=f"pkg:{artifact.artifact_name}@{artifact.artifact_version}",
         purl=purl,
     )
@@ -70,7 +70,7 @@ def generate_cyclonedx_sbom(artifact: AttestRequest) -> dict[str, Any]:
         dep_component = Component(
             name=dep.get("name", "unknown"),
             version=dep.get("version", "unknown"),
-            component_type=ComponentType.LIBRARY,
+            type=ComponentType.LIBRARY,
             bom_ref=f"pkg:{dep.get('name')}@{dep.get('version')}",
             purl=dep_purl,
         )

@@ -4,6 +4,7 @@ from __future__ import annotations
 import sys
 import os
 
+import httpx
 import pytest
 from httpx import AsyncClient
 
@@ -19,7 +20,7 @@ def anyio_backend():
 async def client():
     """Create test client for the FastAPI app."""
     from src.api.main import app
-    async with AsyncClient(app=app, base_url="http://test") as ac:
+    async with AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://test") as ac:
         yield ac
 
 
